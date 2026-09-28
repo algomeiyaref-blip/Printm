@@ -1,0 +1,11 @@
+{
+  "name":"prinm0 AI Business",
+  "short_name":"prinm0",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#070b14",
+  "theme_color":"#0b1220",
+  "lang":"ar",
+  "dir":"rtl",
+  "icons":[]
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>prinm0 | AI Business</title>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <div class="brand">prinm0</div>
+        <div class="sub">مدير أعمالك بالذكاء الاصطناعي</div>
+      </div>
+      <button class="avatar">P</button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <span class="status-dot"></span>
+          <span>النظام يعمل</span>
+          <h1>مرحباً بك 👋</h1>
+          <p>تابع رسائل العملاء والطلبات من مكان واحد.</p>
+        </div>
+        <div class="orb">AI</div>
+      </section>
+
+      <section class="stats">
+        <div class="card"><span>المحادثات</span><strong>24</strong><small>اليوم</small></div>
+        <div class="card"><span>الطلبات</span><strong>8</strong><small>اليوم</small></div>
+        <div class="card"><span>عملاء جدد</span><strong>13</strong><small>اليوم</small></div>
+      </section>
+
+      <section>
+        <div class="section-title"><h2>الحسابات</h2><button onclick="toast('إضافة حساب ستتوفر عند ربط Meta')">+ إضافة</button></div>
+        <div class="accounts">
+          <div class="account">
+            <div class="icon wa">W</div><div><b>WhatsApp</b><small>جاهز للربط</small></div>
+            <span class="pill off">غير متصل</span>
+          </div>
+          <div class="account">
+            <div class="icon ig">◎</div><div><b>Instagram</b><small>جاهز للربط</small></div>
+            <span class="pill off">غير متصل</span>
+          </div>
+          <div class="account">
+            <div class="icon ai">✦</div><div><b>OpenAI</b><small>محرك الردود الذكية</small></div>
+            <span class="pill on">متصل</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title"><h2>آخر المحادثات</h2><button onclick="showScreen('chats')">عرض الكل</button></div>
+        <div class="chat" onclick="openChat('محمد','أريد معرفة سعر المنتج')">
+          <div class="avatar user">م</div><div class="chat-body"><b>محمد</b><p>أريد معرفة سعر المنتج</p></div><span class="time">الآن</span>
+        </div>
+        <div class="chat" onclick="openChat('سارة','هل يوجد توصيل؟')">
+          <div class="avatar user">س</div><div class="chat-body"><b>سارة</b><p>هل يوجد توصيل؟</p></div><span class="time">منذ 5د</span>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom">
+      <button class="active" onclick="showScreen('home')">⌂<small>الرئيسية</small></button>
+      <button onclick="showScreen('chats')">☷<small>المحادثات</small></button>
+      <button onclick="showScreen('orders')">▣<small>الطلبات</small></button>
+      <button onclick="showScreen('settings')">⚙<small>الإعدادات</small></button>
+    </nav>
+  </div>
+
+  <div id="screen" class="modal hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>

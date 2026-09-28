@@ -1,18 +1,11 @@
-const modal=document.getElementById('screen');
-function showScreen(name){
-  if(name==='home'){modal.classList.add('hidden');return}
-  modal.classList.remove('hidden');
-  const title={chats:'المحادثات',orders:'الطلبات',settings:'الإعدادات'}[name]||'prinm0';
-  modal.innerHTML=`<div class="panel"><button class="back" onclick="showScreen('home')">← رجوع</button><h1>${title}</h1>
-  ${name==='chats'?'<div class="account"><div class="icon ai">✦</div><div><b>الرد الآلي</b><small>يمكن تفعيله بعد ربط الحسابات</small></div><span class="pill off">متوقف</span></div><div class="chat"><div class="avatar user">م</div><div class="chat-body"><b>محمد</b><p>أريد معرفة سعر المنتج</p></div></div>':
-  name==='orders'?'<div class="account"><div><b>لا توجد طلبات حقيقية بعد</b><small>ستظهر الطلبات هنا بعد ربط WhatsApp/Instagram.</small></div></div>':
-  '<div class="account"><div><b>إعدادات الذكاء الاصطناعي</b><small>أسلوب الرد: ودود واحترافي</small></div></div><div class="account"><div><b>الربط بالحسابات</b><small>WhatsApp Business • Instagram • OpenAI</small></div></div>'}</div>`;
-}
-function openChat(name,msg){
-  modal.classList.remove('hidden');
-  modal.innerHTML=`<div class="panel"><button class="back" onclick="showScreen('home')">← رجوع</button><h2>${name}</h2>
-  <div class="msg">${msg}</div><div class="msg me">أهلاً بك 👋 يمكنني مساعدتك في معرفة السعر وتفاصيل الطلب.</div>
-  <div class="input"><input placeholder="اكتب رسالة تجريبية"><button onclick="toast('الربط الحقيقي يحتاج إعداد API')">إرسال</button></div></div>`;
-}
+const PRINM0_API = window.location.origin; const modal = document.getElementById('screen');
+function esc(v){ return String(v ?? '').replace(/[&<>'"]/g,c=>({ '&':'&','<':'<','>':'>',"'":''','"':'"' }[c])); }
+function showScreen(name){ if(name==='home'){ modal.classList.add('hidden'); return; } modal.classList.remove('hidden'); const title={chats:'المحادثات',orders:'الطلبات',settings:'الإعدادات'}[name]||'prinm0';
+  if(name='chats'){ modal.innerHTML=<div class="panel"><button class="back" onclick="showScreen('home')">← رجوع</button><h1>${title}</h1>       <div class="account"><div class="icon ai">✦</div><div><b>الرد الآلي</b><small>سيعمل بعد ربط WhatsApp وInstagram</small></div><span class="pill off">متوقف</span></div>       <div class="chat" onclick="openChat('محمد','أريد معرفة سعر المنتج','محمد')"><div class="avatar user">م</div><div class="chat-body"><b>محمد</b><p>أريد معرفة سعر المنتج</p></div></div>       <div class="chat" onclick="openChat('سارة','هل يوجد توصيل؟','سارة')"><div class="avatar user">س</div><div class="chat-body"><b>سارة</b><p>هل يوجد توصيل؟</p></div></div>     </div>; } else if(name='orders'){ modal.innerHTML=<div class="panel"><button class="back" onclick="showScreen('home')">← رجوع</button><h1>${title}</h1><div class="account"><div><b>لا توجد طلبات حقيقية بعد</b><small>ستظهر الطلبات هنا بعد ربط WhatsApp/Instagram.</small></div></div></div>; } else { modal.innerHTML=<div class="panel"><button class="back" onclick="showScreen('home')">← رجوع</button><h1>${title}</h1><div class="account"><div><b>إعدادات الذكاء الاصطناعي</b><small>أسلوب الرد: ودود واحترافي</small></div></div><div class="account"><div><b>الربط بالحسابات</b><small>WhatsApp Business • Instagram • OpenAI</small></div></div><div class="account"><div><b>عنوان الخادم</b><small style="direction:ltr;display:block">${esc(PRINM0_API)}</small></div></div></div>; } }
+async function sendTestMessage(customer){ const input=document.getElementById('chatInput'); const box=document.getElementById('chatMessages'); const text=input.value.trim(); if(!text)return;
+  input.value=''; box.insertAdjacentHTML('beforeend',<div class="msg">${esc(text)}</div>); box.insertAdjacentHTML('beforeend',<div class="msg ai-msg" id="thinking">⏳ جاري التفكير...</div>); box.scrollTop=box.scrollHeight;
+  try{ const r=await fetch(${window.location.origin}/chat,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({channel:'app',customer_id:customer,message:text}) }); const data=await r.json().catch(()=>({})); if(!r.ok) throw new Error(data.detail||'API error'); const thinking=document.getElementById('thinking'); if(thinking) thinking.textContent=data.reply||'لم يصل رد.'; }catch(e){ const thinking=document.getElementById('thinking'); if(thinking) thinking.textContent='❌ تعذر الاتصال بالخادم. تأكد أن Railway يعمل وأن OPENAI_API_KEY مضبوط.'; } box.scrollTop=box.scrollHeight; }
+function openChat(name,msg,customer=name){ modal.classList.remove('hidden'); modal.innerHTML=`<div class="panel"><button class="back" onclick="showScreen('chats')">← رجوع</button><h2>{esc(name)}</h2>
+    <div id="chatMessages" class="chat-messages"><div class="msg customer-msg">{esc(msg)}</div></div> <div class="input"><input id="chatInput" placeholder="اكتب رسالة تجريبية" onkeydown="if(event.key==='Enter')sendTestMessage('${esc(customer)}')"><button onclick="sendTestMessage('${esc(customer)}')">إرسال</button></div> <small style="display:block;margin-top:10px;opacity:.7">اتصال مباشر بخادم prinm0 عبر Railway</small>
 function toast(t){alert(t)}
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js')

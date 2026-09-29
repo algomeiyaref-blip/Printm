@@ -11,8 +11,23 @@ APP_NAME = "prinm0"
 
 load_dotenv()
 app=FastAPI(title="prinm0 API", version="2.0")
-FRONTEND_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+_FRONTEND_CANDIDATES = [
+    BASE_DIR,
+    os.path.join(BASE_DIR, "frontend"),
+    os.path.join(BASE_DIR, "..", "frontend"),
+    "/app",
+    "/app/frontend",
+]
+
+FRONTEND_DIR = BASE_DIR
+
+for _candidate in _FRONTEND_CANDIDATES:
+    _candidate = os.path.abspath(_candidate)
+    if os.path.exists(os.path.join(_candidate, "index.html")):
+        FRONTEND_DIR = _candidate
+        break
 DB="prinm0.db"
 ADMIN_USER=os.getenv('ADMIN_USER','admin')
 ADMIN_PASSWORD=os.getenv('ADMIN_PASSWORD','change-this-password')

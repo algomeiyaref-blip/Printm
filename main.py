@@ -11,6 +11,16 @@ APP_NAME = "prinm0"
 
 load_dotenv()
 app=FastAPI(title="prinm0 API", version="2.0")
+@app.get("/debug/frontend", include_in_schema=False)
+def debug_frontend():
+    return {
+        "main_file": os.path.abspath(__file__),
+        "frontend_dir": os.path.abspath(FRONTEND_DIR),
+        "index_html": os.path.exists(os.path.join(FRONTEND_DIR, "index.html")),
+        "app_js": os.path.exists(os.path.join(FRONTEND_DIR, "app.js")),
+        "app_v10_js": os.path.exists(os.path.join(FRONTEND_DIR, "app_v10.js")),
+        "sw_js": os.path.exists(os.path.join(FRONTEND_DIR, "sw.js"))
+         }
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 _FRONTEND_CANDIDATES = [
